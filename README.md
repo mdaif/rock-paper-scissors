@@ -1,43 +1,45 @@
 # About
-This is a console-based game to simulate the Rock,Paper,Scissors game. It allows you to enter a choice of symbols (rock, paper, scissors), and randomly generate a symbol out of the allowed symbols, and based on the rules of the game, it'd determine who won  and who lost.
+This is a console-based game to simulate the Rock,Paper,Scissors game. It allows you to enter a choice of symbols (rock, paper, scissors), and randomly generate a symbol out of the allowed symbols, and based on the rules of the game, it'd determine who won and who lost.
+The purpose of the game to brush up/ put my OOP design skills into action :-)
 
-# Assumptions
+# Rules
 - The n rounds is pre-determined. You specify the number of rounds you'd like to play when you run the game.
-- As in real life, your opponent (the computer in this case) might pick the same symbol as you did. I deliberately assumed that the required behavior is to announce that it's a draw, continue playing and don't count this round. A round is done only when a user or the computer wins.
+- As in real life, your opponent (the computer in this case) might pick the same symbol as you did. The behavior is to announce that it's a draw, continue playing and don't count this round. A round is done only when a user or the computer wins.
 
 # Design
 - The design follows the open-closed principle. Most of the classes are open to extension but close to modification.
 - You can extend the game to allow two behaviors:
 	1. You can create an extended version/ flavor of the same game, reusing the exact same logic but with different easy-to-define rules. As an example, I included the [Rock-Paper-Scissors-Lizard-Spock](https://bigbangtheory.fandom.com/wiki/Rock,_Paper,_Scissors,_Lizard,_Spock)
 that have a slightly modified set of rules and it uses the same engine and user interface.
-2. I used Strategy Pattern to enable the client to change how to interact with the game. For simplicity I implemented a handler to accept user inputs interactively and to display the results on the console. This can be simply replaced by a handler that gets the input from a file/ sends the output to a file/ gets the input from network/ sends the output to a printer / or a combination of those ! More on how to do that later.
+	2. I used Strategy Pattern to enable the client to change how to interact with the game. For simplicity I implemented a handler to accept user inputs interactively and to display the results on the console. This can be simply replaced by a handler that gets the input from a file/ sends the output to a file/ gets the input from network/ sends the output to a printer / or a combination of those ! More on how to do that later.
 - I added some logging to reflect real life scenarios. In case of simple console-based handlers it has no real value, but if the handlers are placed with network based handlers, the loggers would be necessary to know what went on during a game. For simplicity, the loggers are console based but they can be configure to use other logging handlers as well.
-- I believe if I were to code the same program in Java, I'd have needed to use a full factory pattern (either a method or classes) but with Python, most of the time you can create a concrete implementation using a simple dictionary. That was my approach to create concrete flavors.
 
 # How to play
 - The game is a console-based game.	You can run it from the command line as follows
  `python3 rock_paper_scissors.py --rounds 3`
+
 - `--rounds` is required. It determines how many rounds you can play before the program terminates (Excluding the "draw" rounds.)
 - There's an optional `--flavor` argument. It lets you play another flavor of the game. The second flavor that I implemented as a proof of extensiblity is  Rock-Paper-Scissors-Lizard-Spock but you can define other flavors with crazy rules (like inverting who can win after 9 O'clock !), more on how to do that later.
 - If you wish to exit you can write STOP (this value can be changed in the code)
 - User choices are validated automatically based on the flavor's defined rules.
 - Wrong inputs are handled via argparse and there are useful help messages.
-
+```
     $ python3 rock_paper_scissors.py --rounds 3 --flavos
     usage: rock_paper_scissors.py [-h] --rounds ROUNDS [--flavor {vanilla,rpsls}]
     rock_paper_scissors.py: error: unrecognized arguments: --flavos
-
+```
+```
     $ python3 rock_paper_scissors.py --rounds 3 --flavor somethingelse
     usage: rock_paper_scissors.py [-h] --rounds ROUNDS [--flavor {vanilla,rpsls}]
     rock_paper_scissors.py: error: argument --flavor: invalid choice: 'somethingelse' (choose from 'vanilla', 'rpsls')
-
-
+```
+```
     $ python3 rock_paper_scissors.py
     usage: rock_paper_scissors.py [-h] --rounds ROUNDS [--flavor {vanilla,rpsls}]
     rock_paper_scissors.py: error: the following arguments are required: --rounds
-
+```
 - Vanilla Rock Paper Scissors example:
-
+```
     $ python3 rock_paper_scissors.py --rounds 3
     2019-09-22 14:12:57,138 Initializing engine for 3 rounds and VanillaRPSRules game
     Choose your symbol ['scissors', 'paper', 'rock'] [Enter STOP to exit]: paepr
@@ -60,9 +62,9 @@ that have a slightly modified set of rules and it uses the same engine and user 
     And I choose rock
     You win !
     That was fun ! bye !
-
+```
 - Rock Paper Scissors Lizard Spock Example
-
+```
     (venv)$ python3 rock_paper_scissors.py --rounds 3 --flavor rpsls
     2019-09-22 14:22:20,135 Initializing engine for 3 rounds and RockPaperScissorsLizardSpockRules game
     Choose your symbol ['spock', 'lizard', 'scissors', 'paper', 'rock'] [Enter STOP to exit]: spock
@@ -96,13 +98,13 @@ that have a slightly modified set of rules and it uses the same engine and user 
     And I choose paper
     You win !
     That was fun ! bye !
-
+```
 
 # Testing
 - I didn't use any external testing frameworks, only the standard Python unittest. All tests live under tests.py module.
 - You can run the tests by issuing the command
 
-    python3 -m unittest
+    `python3 -m unittest`
 
 under the project's root directory
 
